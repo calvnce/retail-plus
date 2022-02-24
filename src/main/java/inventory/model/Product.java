@@ -1,20 +1,21 @@
 package inventory.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
 public class Product {
     private  long Id;
     private String name;
-    private Date mfgDate;
-    private Date expiryDate;
+    private LocalDate mfgDate;
+    private LocalDate expiryDate;
     private double buyingPrice;
     private double SellingPrice;
 
     public Product() {
     }
 
-    public Product(long id, String name, Date mfgDate, Date expiryDate, double buyingPrice, double sellingPrice) {
+    public Product(long id, String name, double buyingPrice, double sellingPrice, LocalDate mfgDate, LocalDate expiryDate) {
         Id = id;
         this.name = name;
         this.mfgDate = mfgDate;
@@ -39,19 +40,19 @@ public class Product {
         this.name = name;
     }
 
-    public Date getMfgDate() {
+    public LocalDate getMfgDate() {
         return mfgDate;
     }
 
-    public void setMfgDate(Date mfgDate) {
+    public void setMfgDate(LocalDate mfgDate) {
         this.mfgDate = mfgDate;
     }
 
-    public Date getExpiryDate() {
+    public LocalDate getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(Date expiryDate) {
+    public void setExpiryDate(LocalDate expiryDate) {
         this.expiryDate = expiryDate;
     }
 

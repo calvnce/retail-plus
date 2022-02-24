@@ -8,14 +8,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Database {
-
     private Connection connection = null;
 
     /**
      * Create a connection for database actions
      * @return connection
      */
-    private  Connection getConnection() {
+    public   Connection getConnection() {
         try {
             // db parameters
             String url = "jdbc:sqlite:inventory.sqlite";
