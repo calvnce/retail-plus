@@ -78,13 +78,6 @@ public class Dashboard extends Component {
         submenu.add(menuItem);
         menu.add(submenu);
 
-        //Find Product Menu
-        menuItem = new JMenuItem("Find",
-                KeyEvent.VK_F);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_F,InputEvent.CTRL_DOWN_MASK));
-        menu.add(menuItem);
-
         //List Product Menu
         menuItem = new JMenuItem( new AbstractAction("List") {
             @Override
@@ -106,6 +99,16 @@ public class Dashboard extends Component {
         menu.setMnemonic(KeyEvent.VK_N);
         menu.getAccessibleContext().setAccessibleDescription(
                 "This menu enables the users to manage orders");
+
+        //Add new product menu
+        menuItem = new JMenuItem( new AbstractAction("New") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                new CreateOrder();
+            }
+        });
+        menu.add(menuItem);
+
         menuBar.add(menu);
 
 

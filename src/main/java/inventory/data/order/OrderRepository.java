@@ -107,7 +107,10 @@ public class OrderRepository implements Repository<Order> {
         List<Order> orders = new ArrayList<>();
         try {
             //Select sql statement
-            this.query = "SELECT * FROM Orders ORDER BY OrderDate DESC ";
+            this.query = "SELECT P.Id, P.ProductName, S.SupplierName, O.Quantity, OrderAmount, OrderStatus, O.OrderDate " +
+                                    "FROM Product P "+
+                                    "INNER JOIN  Orders O ON P.Id = O.ProductId "+
+                                    "INNER JOIN Supplier S on S.Id = O.SupplierId  ";
             //Get connection
             this.preparedStatement = this.database.getConnection().prepareStatement(this.query);
 
@@ -115,14 +118,7 @@ public class OrderRepository implements Repository<Order> {
             this.resultSet = this.preparedStatement.executeQuery();
 
             // collect the results
-            while (this.resultSet.next()) {
-                Product product = new Product();
-                Supplier supplier = new Supplier();
-                product.setId(this.resultSet.getLong(2));
-                supplier.setId(this.resultSet.getLong(3));
-                orders.add(new Order(this.resultSet.getLong(1),product,supplier,this.resultSet.getInt(4),
-                        this.resultSet.getDouble(5),this.resultSet.getString(6), this.resultSet.getDate(7).toLocalDate()));
-            }
+            get(orders);
         } catch (SQLException e) {
             e.printStackTrace();
         }finally {
@@ -145,6 +141,17 @@ public class OrderRepository implements Repository<Order> {
         return orders;
     }
 
+    private void get(List<Order> orders) throws SQLException {
+        while (this.resultSet.next()) {
+            Product product = new Product();
+            Supplier supplier = new Supplier();
+            product.setName(this.resultSet.getString(2));
+            supplier.setName(this.resultSet.getString(3));
+            orders.add(new Order(this.resultSet.getLong(1),product,supplier,this.resultSet.getInt(4),
+                    this.resultSet.getDouble(5),this.resultSet.getString(6), this.resultSet.getDate(7).toLocalDate()));
+        }
+    }
+
     @Override
     public List<Order> filter(String str) {
         List<Order> orders = new ArrayList<>();
@@ -163,14 +170,7 @@ public class OrderRepository implements Repository<Order> {
             this.resultSet = this.preparedStatement.executeQuery();
 
             // collect the results
-            while (this.resultSet.next()) {
-                Product product = new Product();
-                Supplier supplier = new Supplier();
-                product.setId(this.resultSet.getLong(2));
-                supplier.setId(this.resultSet.getLong(3));
-                orders.add(new Order(this.resultSet.getLong(1),product,supplier,this.resultSet.getInt(4),
-                        this.resultSet.getDouble(5),this.resultSet.getString(6), this.resultSet.getDate(7).toLocalDate()));
-            }
+            get(orders);
         } catch (SQLException e) {
             e.printStackTrace();
         }finally {
