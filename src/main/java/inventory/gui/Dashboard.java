@@ -1,5 +1,8 @@
 package inventory.gui;
 
+import inventory.model.Product;
+import inventory.model.Supplier;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -17,8 +20,30 @@ public class Dashboard extends Component {
 
         //Create the menu bar.
         menuBar = new JMenuBar();
+        //Build second menu in the menu bar.
+        menu = new JMenu("Supplier");
+        menu.setMnemonic(KeyEvent.VK_N);
+        menu.getAccessibleContext().setAccessibleDescription(
+                "This menu enables the users to manage suppliers");
+        menuBar.add(menu);
+        //Add new product menu
+        menuItem = new JMenuItem( new AbstractAction("Add") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                new CreateSupplier();
+            }
+        });
+        menu.add(menuItem);
 
-        //Build the first menu.
+        //Add new product menu
+        menuItem = new JMenuItem( new AbstractAction("List") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                new SupplierList();
+            }
+        });
+        menu.add(menuItem);
+        //Build the Product menu.
         menu = new JMenu("Product");
         menu.setMnemonic(KeyEvent.VK_P);
         menu.getAccessibleContext().setAccessibleDescription(
@@ -32,8 +57,6 @@ public class Dashboard extends Component {
                 new CreateProduct();
             }
         });
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
         menu.add(menuItem);
 
 
@@ -62,11 +85,13 @@ public class Dashboard extends Component {
                 KeyEvent.VK_F,InputEvent.CTRL_DOWN_MASK));
         menu.add(menuItem);
 
-        //Find Product Menu
-        menuItem = new JMenuItem("List",
-                KeyEvent.VK_L);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_L,InputEvent.CTRL_DOWN_MASK));
+        //List Product Menu
+        menuItem = new JMenuItem( new AbstractAction("List") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                new ProductList();
+            }
+        });
         menu.add(menuItem);
 
         //Build second menu in the menu bar.
@@ -82,6 +107,7 @@ public class Dashboard extends Component {
         menu.getAccessibleContext().setAccessibleDescription(
                 "This menu enables the users to manage orders");
         menuBar.add(menu);
+
 
         return menuBar;
     }

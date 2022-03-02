@@ -36,4 +36,9 @@ public class ProductService implements Service<Product> {
     public List<Product> getAll() {
         return this.productRepository.getAll();
     }
+
+    @Override
+    public List<Product> filter(String name) {
+        return this.productRepository.filter(name);
+    }
 }

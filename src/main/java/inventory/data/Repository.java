@@ -8,4 +8,5 @@ public interface Repository <T>{
     void delete(long id);
     T getById(long id);
     List<T> getAll();
+    List<T> filter(String str);
 }

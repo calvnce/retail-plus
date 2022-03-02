@@ -8,7 +8,7 @@ public class Supplier extends Person{
     public Supplier() {
     }
 
-    public Supplier(long id, String address, String phone, String email, String name) {
+    public Supplier(long id, String name, String phone, String email, String address) {
         super(id, address, phone, email);
         Name = name;
     }

@@ -1,5 +1,6 @@
 package inventory.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -9,13 +10,14 @@ public class Order {
     private  Supplier supplier;
     private int quantity;
     private double orderAmount;
-    private Date orderDate;
+    private LocalDate orderDate;
     private String orderStatus;
 
     public Order() {
     }
 
-    public Order(long orderId, Product product, Supplier supplier, int quantity, double orderAmount, Date orderDate, String orderStatus) {
+    public Order(long orderId, Product product, Supplier supplier, int quantity,
+                 double orderAmount, String orderStatus, LocalDate orderDate) {
         this.orderId = orderId;
         this.product = product;
         this.supplier = supplier;
@@ -65,11 +67,11 @@ public class Order {
         this.orderAmount = orderAmount;
     }
 
-    public Date getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
 

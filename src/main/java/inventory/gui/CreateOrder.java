@@ -1,0 +1,122 @@
+package inventory.gui;
+
+import inventory.model.Order;
+import inventory.model.Product;
+import inventory.model.Supplier;
+import inventory.service.Service;
+import inventory.service.order.OrderService;
+import inventory.service.product.ProductService;
+import inventory.service.supplier.SupplierService;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
+
+public class CreateOrder {
+    public  CreateOrder() {
+        Service<Product>productService = new ProductService();
+        Service<Supplier>supplierService = new SupplierService();
+        Service<Order>orderService = new OrderService();
+
+        List<Product>products = productService.getAll();
+        List<Supplier>suppliers = supplierService.getAll();
+
+        String[] productNames = new String[products.size()];
+        String[] supplierNames = new String[suppliers.size()];
+
+        for (int i = 0; i < products.size(); i++) {
+            productNames[i] = products.get(i).getName();
+        }
+        for (int i = 0; i < suppliers.size(); i++) {
+            supplierNames[i] = products.get(i).getName();
+        }
+
+        JFrame frame = new JFrame("New Order");
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setSize(600,300);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.WEST;
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(10,10,10,5);  //top padding
+        //Labels
+        JLabel productLabel = new JLabel("Product");
+        c.gridx =0;
+        c.gridy =0;
+        panel.add(productLabel,c);
+        JLabel supplierLabel = new JLabel("Supplier");
+        c.gridx =2;
+        c.gridy =0;
+        panel.add(supplierLabel,c);
+        JLabel quantityLabel = new JLabel("Quantity");
+        c.gridx =0;
+        c.gridy =1;
+        panel.add(supplierLabel,c);
+        JLabel orderDateLabel = new JLabel("Order Date");
+        c.gridx =0;
+        c.gridy =2;
+        panel.add(orderDateLabel,c);
+        JComboBox<String> productComboBox = new JComboBox<>(productNames);
+        c.gridx =1;
+        c.gridy =0;
+        panel.add(productComboBox,c);
+        JComboBox<String> supplierComboBox = new JComboBox<>(supplierNames);
+        c.gridx =3;
+        c.gridy =0;
+        panel.add(productComboBox,c);
+        JTextField quantityText = new JTextField(20);
+        c.gridx =1;
+        c.gridy =1;
+        panel.add(quantityText,c);
+        JFormattedTextField orderDateText = new JFormattedTextField();
+        orderDateText.setValue(LocalDate.now());
+        orderDateText.setColumns(20);
+        c.gridx =1;
+        c.gridy =2;
+        panel.add(orderDateText,c);
+
+        JButton addButton = new JButton(new AbstractAction("Order") {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    Order order = new Order();
+                    Product product = products.stream()
+                            .parallel()
+                            .filter(p->p.getName().equals(Objects.requireNonNull(productComboBox.getSelectedItem()).toString()))
+                            .findFirst()
+                            .orElse(null);
+                    Supplier supplier = suppliers.stream()
+                            .parallel()
+                            .filter(s->s.getName().equals(Objects.requireNonNull(supplierComboBox.getSelectedItem()).toString()))
+                            .findFirst()
+                            .orElse(null);
+                    order.setProduct(product);
+                    order.setSupplier(supplier);
+                    order.setQuantity(Integer.parseInt(quantityText.getText()));
+                    order.setOrderAmount(order.getQuantity()* Objects.requireNonNull(product).getBuyingPrice());
+                    order.setOrderStatus("In process");
+                    order.setOrderDate(LocalDate.parse(orderDateText.getText()));
+
+                    //send to database
+                    orderService.add(order);
+                    //show success
+                    JOptionPane.showMessageDialog(null,"Order submitted","Info",JOptionPane.INFORMATION_MESSAGE);
+                }catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        c.gridx =0;
+        c.gridy =3;
+        panel.add(addButton,c);
+
+        frame.add(panel,BorderLayout.WEST);
+        frame.setVisible(true);
+    }
+}
